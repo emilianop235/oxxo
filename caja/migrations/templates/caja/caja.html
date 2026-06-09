@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control de Cajas - Tienda de Conveniencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= COLORES OXXO ================= */
+        :root {
+            --oxxo-red: #E21836;
+            --oxxo-yellow: #FFD100;
+            --bg-dark: #1E293B; /* Fondo oscuro para contrastar con las tarjetas */
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --white: #FFFFFF;
+            --success: #10B981; /* Verde para caja abierta */
+            --danger: #EF4444; /* Rojo para caja cerrada */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+        body { background-color: var(--bg-light); color: var(--text-dark); }
+
+        /* ================= NAVEGACIÓN ================= */
+        .navbar {
+            background-color: var(--oxxo-red);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+            border-bottom: 5px solid var(--oxxo-yellow);
+        }
+
+        .navbar-brand { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+
+        /* ================= RESUMEN GERENCIAL ================= */
+        .summary-bar {
+            background-color: var(--bg-dark);
+            color: var(--white);
+            padding: 20px 40px;
+            display: flex;
+            gap: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-item { display: flex; flex-direction: column; }
+        .summary-label { font-size: 12px; color: #94A3B8; text-transform: uppercase; font-weight: 700; }
+        .summary-value { font-size: 24px; font-weight: 900; color: var(--oxxo-yellow); }
+
+        /* ================= CUADRÍCULA DE TERMINALES (CAJAS) ================= */
+        .terminals-container {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .terminal-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Cabecera de la Tarjeta */
+        .terminal-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .terminal-info h3 { font-size: 18px; color: var(--text-dark); margin-bottom: 5px; }
+        .terminal-info p { font-size: 13px; color: #64748B; font-weight: 700; }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--white);
+        }
+        .status-abierta { background-color: var(--success); }
+        .status-cerrada { background-color: var(--danger); }
+
+        /* Pantalla de Saldo (Estilo Digital) */
+        .terminal-screen {
+            background-color: #0F172A;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 4px solid var(--oxxo-yellow);
+        }
+
+        .screen-label { color: #94A3B8; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .screen-balance { font-family: 'Courier New', monospace; font-size: 40px; font-weight: 900; color: #10B981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .screen-balance.cerrada { color: #EF4444; text-shadow: none; }
+
+        /* Botones de Acción */
+        .terminal-actions {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            background-color: #F8FAFC;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-open { background-color: var(--oxxo-yellow); color: var(--text-dark); }
+        .btn-open:hover { background-color: #E6BC00; }
+        .btn-open:disabled { background-color: #E2E8F0; color: #94A3B8; cursor: not-allowed; }
+
+        .btn-close { background-color: var(--text-dark); color: var(--white); }
+        .btn-close:hover { background-color: #000000; }
+        .btn-close:disabled { background-color: #E2E8F0; color: #94A3B8; cursor: not-allowed; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fa-solid fa-cash-register"></i> Panel de Cajas OXXO</div>
+        <div><i class="fa-solid fa-clock"></i> Corte: 22:00 Hrs</div>
+    </nav>
+
+    <div class="summary-bar">
+        <div class="summary-item">
+            <span class="summary-label">Total en Bóveda</span>
+            <span class="summary-value" id="totalBoveda">$0.00</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Cajas Abiertas</span>
+            <span class="summary-value" id="cajasActivas">0 / 3</span>
+        </div>
+    </div>
+
+    <div class="terminals-container">
+
+        <div class="terminal-card" id="tarjetaCaja1">
+            <div class="terminal-header">
+                <div class="terminal-info">
+                    <h3>Caja Principal</h3>
+                    <p>ID: 1</p>
+                </div>
+                <span class="status-badge status-cerrada" id="estadoCaja1">Cerrada</span>
+            </div>
+            <div class="terminal-screen">
+                <div class="screen-label">Saldo Actual</div>
+                <div class="screen-balance cerrada" id="saldoCaja1">$0.00</div>
+            </div>
+            <div class="terminal-actions">
+                <button class="btn btn-open" id="btnAbrir1" onclick="abrirCaja(1, 'Caja Principal')"><i class="fa-solid fa-key"></i> Abrir Caja</button>
+                <button class="btn btn-close" id="btnCerrar1" onclick="cerrarCaja(1, 'Caja Principal')" disabled><i class="fa-solid fa-lock"></i> Corte y Cierre</button>
+            </div>
+        </div>
+
+        <div class="terminal-card" id="tarjetaCaja2">
+            <div class="terminal-header">
+                <div class="terminal-info">
+                    <h3>Caja Secundaria</h3>
+                    <p>ID: 2</p>
+                </div>
+                <span class="status-badge status-cerrada" id="estadoCaja2">Cerrada</span>
+            </div>
+            <div class="terminal-screen">
+                <div class="screen-label">Saldo Actual</div>
+                <div class="screen-balance cerrada" id="saldoCaja2">$0.00</div>
+            </div>
+            <div class="terminal-actions">
+                <button class="btn btn-open" id="btnAbrir2" onclick="abrirCaja(2, 'Caja Secundaria')"><i class="fa-solid fa-key"></i> Abrir Caja</button>
+                <button class="btn btn-close" id="btnCerrar2" onclick="cerrarCaja(2, 'Caja Secundaria')" disabled><i class="fa-solid fa-lock"></i> Corte y Cierre</button>
+            </div>
+        </div>
+
+        <div class="terminal-card" id="tarjetaCaja3">
+            <div class="terminal-header">
+                <div class="terminal-info">
+                    <h3>Caja de Emergencia</h3>
+                    <p>ID: 3</p>
+                </div>
+                <span class="status-badge status-cerrada" id="estadoCaja3">Cerrada</span>
+            </div>
+            <div class="terminal-screen">
+                <div class="screen-label">Saldo Actual</div>
+                <div class="screen-balance cerrada" id="saldoCaja3">$0.00</div>
+            </div>
+            <div class="terminal-actions">
+                <button class="btn btn-open" id="btnAbrir3" onclick="abrirCaja(3, 'Caja de Emergencia')"><i class="fa-solid fa-key"></i> Abrir Caja</button>
+                <button class="btn btn-close" id="btnCerrar3" onclick="cerrarCaja(3, 'Caja de Emergencia')" disabled><i class="fa-solid fa-lock"></i> Corte y Cierre</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Simulamos un diccionario para guardar el estado de las cajas como en Python
+        let cajasDB = {
+            1: { saldo: 0.0, estado: "Cerrada" },
+            2: { saldo: 0.0, estado: "Cerrada" },
+            3: { saldo: 0.0, estado: "Cerrada" }
+        };
+
+        // Formateador de moneda
+        const formatoDinero = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+
+        // Método: abrir_caja(self_inicio)
+        function abrirCaja(id_caja, nombre_caja) {
+            let saldoInicialStr = prompt(`Ingrese el SALDO INICIAL para abrir la ${nombre_caja}:`);
+            
+            if (saldoInicialStr !== null && saldoInicialStr !== "") {
+                let saldoInicial = parseFloat(saldoInicialStr);
+                
+                // Actualizamos nuestra "Base de datos"
+                cajasDB[id_caja].saldo = saldoInicial;
+                cajasDB[id_caja].estado = "Abierta";
+                
+                // Actualizamos la vista (HTML)
+                document.getElementById(`estadoCaja${id_caja}`).textContent = "Abierta";
+                document.getElementById(`estadoCaja${id_caja}`).className = "status-badge status-abierta";
+                
+                let displaySaldo = document.getElementById(`saldoCaja${id_caja}`);
+                displaySaldo.textContent = formatoDinero.format(cajasDB[id_caja].saldo);
+                displaySaldo.className = "screen-balance"; // Letras verdes
+                
+                // Habilitar/Deshabilitar botones
+                document.getElementById(`btnAbrir${id_caja}`).disabled = true;
+                document.getElementById(`btnCerrar${id_caja}`).disabled = false;
+
+                actualizarResumen();
+                console.log(`Caja ${nombre_caja} abierta con saldo inicial de: ${saldoInicial}`);
+            }
+        }
+
+        // Método: cerrar_caja(ventas)
+        function cerrarCaja(id_caja, nombre_caja) {
+            let ventasStr = prompt(`Corte de caja. Ingrese el TOTAL DE VENTAS de la ${nombre_caja}:`);
+            
+            if (ventasStr !== null && ventasStr !== "") {
+                let ventas = parseFloat(ventasStr);
+                
+                // Lógica de tu código: self.saldo += ventas
+                cajasDB[id_caja].saldo += ventas;
+                cajasDB[id_caja].estado = "Cerrada";
+                
+                // Actualizamos la vista (HTML)
+                document.getElementById(`estadoCaja${id_caja}`).textContent = "Cerrada";
+                document.getElementById(`estadoCaja${id_caja}`).className = "status-badge status-cerrada";
+                
+                let displaySaldo = document.getElementById(`saldoCaja${id_caja}`);
+                displaySaldo.textContent = formatoDinero.format(cajasDB[id_caja].saldo);
+                displaySaldo.className = "screen-balance cerrada"; // Letras rojas
+                
+                // Habilitar/Deshabilitar botones
+                document.getElementById(`btnAbrir${id_caja}`).disabled = false;
+                document.getElementById(`btnCerrar${id_caja}`).disabled = true;
+
+                actualizarResumen();
+                console.log(`Caja ${nombre_caja} cerrada con saldo final de: ${cajasDB[id_caja].saldo}`);
+                
+                alert(`Corte realizado con éxito.\nSaldo Final en ${nombre_caja}: ${formatoDinero.format(cajasDB[id_caja].saldo)}`);
+            }
+        }
+
+        function actualizarResumen() {
+            let total = 0;
+            let abiertas = 0;
+            
+            for (let id in cajasDB) {
+                total += cajasDB[id].saldo;
+                if (cajasDB[id].estado === "Abierta") abiertas++;
+            }
+            
+            document.getElementById('totalBoveda').textContent = formatoDinero.format(total);
+            document.getElementById('cajasActivas').textContent = `${abiertas} / 3`;
+        }
+    </script>
+</body>
+</html>

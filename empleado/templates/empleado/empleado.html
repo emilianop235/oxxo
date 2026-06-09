@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recursos Humanos - Tienda de Conveniencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= COLORES OXXO ================= */
+        :root {
+            --oxxo-red: #E21836;
+            --oxxo-yellow: #FFD100;
+            --bg-light: #F1F5F9;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+        body { background-color: var(--bg-light); color: var(--text-dark); }
+
+        /* ================= NAVEGACIÓN ================= */
+        .navbar {
+            background-color: var(--oxxo-red);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+            border-bottom: 5px solid var(--oxxo-yellow);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+
+        /* ================= ESTRUCTURA PRINCIPAL ================= */
+        .hr-container {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* ================= PANEL DE ALTA (IZQUIERDA) ================= */
+        .alta-panel {
+            background: var(--white);
+            width: 350px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 30px;
+        }
+
+        .alta-header {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .alta-header i { font-size: 40px; color: var(--oxxo-yellow); margin-bottom: 10px; }
+        .alta-header h2 { font-size: 18px; font-weight: 700; }
+
+        .alta-form { padding: 25px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
+        .form-group input { 
+            width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; 
+            background-color: #F8FAFC;
+        }
+        .form-group input:focus { outline: none; border-color: var(--oxxo-red); background-color: var(--white); }
+
+        .btn-alta {
+            width: 100%; background-color: var(--oxxo-red); color: var(--white); border: none; 
+            padding: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.2s;
+            margin-top: 10px; font-size: 15px;
+        }
+        .btn-alta:hover { background-color: #C1122B; }
+
+        /* ================= PANEL DE NÓMINAS (DERECHA) ================= */
+        .nomina-panel {
+            flex: 1;
+        }
+
+        .nomina-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .nomina-header h2 { color: var(--text-dark); font-size: 22px; }
+
+        .empleados-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Tarjeta de Empleado (Recibo de Pago) */
+        .empleado-card {
+            background: var(--white);
+            border-radius: 10px;
+            border-left: 6px solid var(--oxxo-yellow);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            transition: transform 0.2s;
+        }
+        .empleado-card:hover { transform: translateX(5px); }
+
+        .empleado-info { display: flex; align-items: center; gap: 20px; width: 300px; }
+        .gafete-icon { 
+            width: 50px; height: 50px; background-color: #F1F5F9; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--text-muted);
+        }
+        
+        .empleado-detalles h3 { font-size: 16px; color: var(--text-dark); margin-bottom: 3px; }
+        .empleado-detalles p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .badge-id { background-color: var(--text-dark); color: var(--oxxo-yellow); padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-right: 5px; }
+
+        /* Calculadora de Nómina Integrada */
+        .calculadora-nomina {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            background-color: #F8FAFC;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .input-mini { width: 90px; }
+        .input-mini label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+        .input-mini input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; text-align: right; }
+
+        .btn-calcular {
+            background-color: var(--text-dark); color: var(--white); border: none; padding: 9px 15px;
+            border-radius: 4px; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .btn-calcular:hover { background-color: #0F172A; }
+
+        /* Resultado de la Nómina */
+        .resultado-nomina {
+            width: 150px;
+            text-align: right;
+        }
+        .resultado-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+        .resultado-monto { font-size: 22px; font-weight: 900; color: #10B981; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fa-solid fa-users-gear"></i> Portal de Recursos Humanos OXXO</div>
+        <div><i class="fa-solid fa-calendar-check"></i> Quincena: 01 al 15 del Mes</div>
+    </nav>
+
+    <div class="hr-container">
+
+        <div class="alta-panel">
+            <div class="alta-header">
+                <i class="fa-solid fa-id-badge"></i>
+                <h2>Nuevo Ingreso</h2>
+                <p style="font-size: 13px; color: #94A3B8; margin-top: 5px;">Generar alta en sistema</p>
+            </div>
+            <form class="alta-form" id="formAlta" onsubmit="registrarEmpleado(event)">
+                <div class="form-group">
+                    <label>ID de Empleado</label>
+                    <input type="number" id="idEmp" placeholder="Ej. 4" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre(s)</label>
+                    <input type="text" id="nombreEmp" placeholder="Ej. Carlos" required>
+                </div>
+                <div class="form-group">
+                    <label>Apellido(s)</label>
+                    <input type="text" id="apellidoEmp" placeholder="Ej. López" required>
+                </div>
+                <div class="form-group">
+                    <label>Puesto Asignado</label>
+                    <input type="text" id="puestoEmp" placeholder="Ej. Cajero" required>
+                </div>
+                <button type="submit" class="btn-alta"><i class="fa-solid fa-user-plus"></i> Dar de Alta</button>
+            </form>
+        </div>
+
+        <div class="nomina-panel">
+            <div class="nomina-header">
+                <h2>Plantilla Activa y Nóminas</h2>
+            </div>
+            
+            <div class="empleados-list" id="listaEmpleados">
+                
+                <div class="empleado-card">
+                    <div class="empleado-info">
+                        <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
+                        <div class="empleado-detalles">
+                            <h3>Emilio Pérez</h3>
+                            <p><span class="badge-id">ID: 1</span> Desarrollador</p>
+                        </div>
+                    </div>
+                    <div class="calculadora-nomina">
+                        <div class="input-mini">
+                            <label>Pago x Día ($)</label>
+                            <input type="number" id="pago_1" value="100">
+                        </div>
+                        <div class="input-mini">
+                            <label>Días Trab.</label>
+                            <input type="number" id="dias_1" value="20">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularNomina(1, 'Emilio Pérez')">Calcular</button>
+                    </div>
+                    <div class="resultado-nomina">
+                        <div class="resultado-label">Total a Pagar</div>
+                        <div class="resultado-monto" id="resultado_1">---</div>
+                    </div>
+                </div>
+
+                <div class="empleado-card">
+                    <div class="empleado-info">
+                        <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
+                        <div class="empleado-detalles">
+                            <h3>Ana García</h3>
+                            <p><span class="badge-id">ID: 2</span> Diseñadora</p>
+                        </div>
+                    </div>
+                    <div class="calculadora-nomina">
+                        <div class="input-mini">
+                            <label>Pago x Día ($)</label>
+                            <input type="number" id="pago_2" value="80">
+                        </div>
+                        <div class="input-mini">
+                            <label>Días Trab.</label>
+                            <input type="number" id="dias_2" value="22">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularNomina(2, 'Ana García')">Calcular</button>
+                    </div>
+                    <div class="resultado-nomina">
+                        <div class="resultado-label">Total a Pagar</div>
+                        <div class="resultado-monto" id="resultado_2">---</div>
+                    </div>
+                </div>
+
+                <div class="empleado-card">
+                    <div class="empleado-info">
+                        <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
+                        <div class="empleado-detalles">
+                            <h3>Luis Martínez</h3>
+                            <p><span class="badge-id">ID: 3</span> Analista</p>
+                        </div>
+                    </div>
+                    <div class="calculadora-nomina">
+                        <div class="input-mini">
+                            <label>Pago x Día ($)</label>
+                            <input type="number" id="pago_3" value="90">
+                        </div>
+                        <div class="input-mini">
+                            <label>Días Trab.</label>
+                            <input type="number" id="dias_3" value="18">
+                        </div>
+                        <button class="btn-calcular" onclick="calcularNomina(3, 'Luis Martínez')">Calcular</button>
+                    </div>
+                    <div class="resultado-nomina">
+                        <div class="resultado-label">Total a Pagar</div>
+                        <div class="resultado-monto" id="resultado_3">---</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const formatoDinero = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+
+        // Función que simula: alta(self)
+        function registrarEmpleado(event) {
+            event.preventDefault();
+
+            let id = document.getElementById('idEmp').value;
+            let nombre = document.getElementById('nombreEmp').value;
+            let apellido = document.getElementById('apellidoEmp').value;
+            let puesto = document.getElementById('puestoEmp').value;
+            let nombreCompleto = `${nombre} ${apellido}`;
+
+            // Crear nueva tarjeta HTML de empleado
+            let lista = document.getElementById('listaEmpleados');
+            let nuevaTarjeta = document.createElement('div');
+            nuevaTarjeta.className = 'empleado-card';
+            
+            nuevaTarjeta.innerHTML = `
+                <div class="empleado-info">
+                    <div class="gafete-icon"><i class="fa-solid fa-user-check" style="color: #10B981;"></i></div>
+                    <div class="empleado-detalles">
+                        <h3>${nombreCompleto}</h3>
+                        <p><span class="badge-id">ID: ${id}</span> ${puesto}</p>
+                    </div>
+                </div>
+                <div class="calculadora-nomina">
+                    <div class="input-mini">
+                        <label>Pago x Día ($)</label>
+                        <input type="number" id="pago_${id}" placeholder="0">
+                    </div>
+                    <div class="input-mini">
+                        <label>Días Trab.</label>
+                        <input type="number" id="dias_${id}" placeholder="0">
+                    </div>
+                    <button class="btn-calcular" onclick="calcularNomina('${id}', '${nombreCompleto}')">Calcular</button>
+                </div>
+                <div class="resultado-nomina">
+                    <div class="resultado-label">Total a Pagar</div>
+                    <div class="resultado-monto" id="resultado_${id}">---</div>
+                </div>
+            `;
+
+            lista.appendChild(nuevaTarjeta);
+            
+            console.log(`Empleado ${nombreCompleto} con ID ${id} ha sido dado de alta como ${puesto}.`);
+            alert(`¡Alta exitosa!\n${nombreCompleto} agregado al sistema.`);
+            
+            document.getElementById('formAlta').reset();
+        }
+
+        // Función que simula: calcular_nomina(self, pago_por_dia, dias_trabajados)
+        function calcularNomina(id, nombreEmpleado) {
+            let pagoPorDia = parseFloat(document.getElementById(`pago_${id}`).value) || 0;
+            let diasTrabajados = parseFloat(document.getElementById(`dias_${id}`).value) || 0;
+
+            let nomina = pagoPorDia * diasTrabajados;
+
+            // Actualizar la vista
+            document.getElementById(`resultado_${id}`).textContent = formatoDinero.format(nomina);
+
+            // Print en consola como en tu código Python
+            console.log(`La nómina de ${nombreEmpleado} es: ${nomina}`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Inventario - Tienda de Conveniencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= COLORES ESTILO OXXO ================= */
+        :root {
+            --oxxo-red: #E21836;
+            --oxxo-yellow: #FFD100;
+            --bg-light: #F4F6F8;
+            --text-dark: #2C3E50;
+            --white: #FFFFFF;
+            --border-color: #E0E6ED;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* ================= NAVEGACIÓN SUPERIOR ================= */
+        .navbar {
+            background-color: var(--oxxo-red);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 5px solid var(--oxxo-yellow);
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* ================= CONTENEDOR PRINCIPAL ================= */
+        .container {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: calc(100vh - 80px);
+        }
+
+        /* ================= SECCIÓN IZQUIERDA: FORMULARIO ================= */
+        .form-section {
+            flex: 0 0 350px;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--oxxo-red);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #596780;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--oxxo-red);
+            box-shadow: 0 0 0 3px rgba(226, 24, 54, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: var(--oxxo-yellow);
+            color: var(--text-dark);
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #E6BC00;
+        }
+
+        /* ================= SECCIÓN DERECHA: TABLA ================= */
+        .table-section {
+            flex: 1;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .stock-badge {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .action-icon {
+            color: #A0AABF;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .action-icon:hover {
+            color: var(--oxxo-red);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fa-solid fa-store"></i> Punto de Venta | Almacén
+        </div>
+        <div class="user-info">
+            <i class="fa-solid fa-user-circle"></i> Cajero: Turno Matutino
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <div class="form-section">
+            <h2 class="section-title"><i class="fa-solid fa-box-open"></i> Registrar Producto</h2>
+            
+            <form id="formAlmacen" onsubmit="agregarAlInventario(event)">
+                <div class="form-group">
+                    <label>ID de Producto (Automático)</label>
+                    <input type="number" id="idProd" placeholder="Ej. 1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nombre del Producto</label>
+                    <input type="text" id="nombreProd" placeholder="Ej. Coca-Cola 600ml" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Número de Identificación (Código de Barras)</label>
+                    <input type="text" id="numId" placeholder="Ej. 7501055300075" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Cantidad (Stock)</label>
+                    <input type="number" id="stockProd" placeholder="Ej. 50" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Guardar en Almacén</button>
+            </form>
+        </div>
+
+        <div class="table-section">
+            <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Inventario Actual</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Cód. Identificación</th>
+                        <th>Stock Actual</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                    <tr>
+                        <td>1</td>
+                        <td>Laptop</td>
+                        <td>ABC123</td>
+                        <td><span class="stock-badge">50</span></td>
+                        <td><i class="fa-solid fa-trash action-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Smartphone</td>
+                        <td>DEF456</td>
+                        <td><span class="stock-badge">100</span></td>
+                        <td><i class="fa-solid fa-trash action-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Tablet</td>
+                        <td>GHI789</td>
+                        <td><span class="stock-badge">30</span></td>
+                        <td><i class="fa-solid fa-trash action-icon"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        function agregarAlInventario(event) {
+            event.preventDefault(); // Evita que la página recargue
+
+            // Obtenemos los valores del formulario
+            let id = document.getElementById('idProd').value;
+            let nombre = document.getElementById('nombreProd').value;
+            let numId = document.getElementById('numId').value;
+            let stock = document.getElementById('stockProd').value;
+
+            // Creamos una nueva fila para la tabla
+            let tabla = document.getElementById('cuerpoTabla');
+            let nuevaFila = document.createElement('tr');
+
+            nuevaFila.innerHTML = `
+                <td>${id}</td>
+                <td>${nombre}</td>
+                <td>${numId}</td>
+                <td><span class="stock-badge">${stock}</span></td>
+                <td><i class="fa-solid fa-trash action-icon" onclick="this.parentElement.parentElement.remove()"></i></td>
+            `;
+
+            // Agregamos la fila a la tabla y limpiamos el formulario
+            tabla.appendChild(nuevaFila);
+            document.getElementById('formAlmacen').reset();
+            
+            // Simulación de tu print en Python
+            console.log(`producto registrado: ${nombre} con ID: ${id} y número de identificación: ${numId} con stock de: ${stock}`);
+        }
+    </script>
+</body>
+</html>

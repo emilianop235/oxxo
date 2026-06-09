@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reloj Checador - Tienda de Conveniencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= COLORES OXXO ================= */
+        :root {
+            --oxxo-red: #E21836;
+            --oxxo-yellow: #FFD100;
+            --bg-page: #E2E8F0;
+            --kiosk-bg: #FFFFFF;
+            --text-dark: #0F172A;
+            --terminal-bg: #1E293B;
+            --terminal-text: #10B981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+        body { background-color: var(--bg-page); color: var(--text-dark); display: flex; flex-direction: column; height: 100vh; }
+
+        /* ================= NAVEGACIÓN ================= */
+        .navbar {
+            background-color: var(--oxxo-red);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            border-bottom: 5px solid var(--oxxo-yellow);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .navbar-brand { font-size: 24px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* ================= CONTENEDOR DEL KIOSCO ================= */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 30px;
+        }
+
+        /* ================= EL RELOJ CHECADOR (IZQUIERDA) ================= */
+        .kiosk-device {
+            background-color: var(--kiosk-bg);
+            width: 400px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 2px solid #CBD5E1;
+            text-align: center;
+        }
+
+        /* Pantalla del Reloj Digital */
+        .digital-clock-area {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 30px 20px;
+            border-bottom: 4px solid var(--oxxo-yellow);
+        }
+
+        .date-display { font-size: 14px; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .time-display { font-family: 'Share Tech Mono', monospace; font-size: 48px; font-weight: 400; color: #38BDF8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+
+        /* Panel de Control (Inputs y Botones) */
+        .control-panel { padding: 30px; }
+
+        .input-group { margin-bottom: 25px; text-align: left; }
+        .input-group label { display: block; font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+        .input-group input {
+            width: 100%; padding: 15px; font-size: 18px; text-align: center; letter-spacing: 2px;
+            border: 2px solid #CBD5E1; border-radius: 8px; font-weight: 700; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--oxxo-red); box-shadow: 0 0 0 4px rgba(226, 24, 54, 0.1); }
+
+        .action-buttons { display: flex; gap: 15px; }
+        .btn-action {
+            flex: 1; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: 900;
+            color: white; cursor: pointer; transition: transform 0.1s, opacity 0.2s;
+            display: flex; flex-direction: column; align-items: center; gap: 5px; text-transform: uppercase;
+        }
+        .btn-action:active { transform: scale(0.95); }
+        .btn-action i { font-size: 24px; }
+        
+        .btn-entrada { background-color: #10B981; } /* Verde para entrada */
+        .btn-entrada:hover { background-color: #059669; }
+        
+        .btn-salida { background-color: var(--oxxo-red); } /* Rojo para salida */
+        .btn-salida:hover { background-color: #BE122C; }
+
+        /* ================= TERMINAL / BITÁCORA (DERECHA) ================= */
+        .system-log {
+            background-color: var(--terminal-bg);
+            width: 500px;
+            height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .log-header {
+            background-color: #0F172A; padding: 15px 20px; color: #94A3B8; font-size: 12px;
+            font-family: 'Share Tech Mono', monospace; display: flex; justify-content: space-between;
+        }
+
+        .log-body {
+            flex: 1; padding: 20px; overflow-y: auto; font-family: 'Share Tech Mono', monospace; font-size: 13px; color: var(--terminal-text);
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .log-entry { padding: 8px 12px; border-radius: 4px; border-left: 3px solid; background: rgba(0,0,0,0.2); }
+        .log-post { border-left-color: #38BDF8; color: #E0F2FE; } /* Estilo para POST (Entrada) */
+        .log-put { border-left-color: #F59E0B; color: #FEF3C7; }  /* Estilo para PUT (Salida) */
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fa-regular fa-clock"></i> Kiosco de Asistencias</div>
+    </nav>
+
+    <div class="main-container">
+
+        <div class="kiosk-device">
+            <div class="digital-clock-area">
+                <div class="date-display" id="fechaReloj">Cargando fecha...</div>
+                <div class="time-display" id="horaReloj">--:--:--</div>
+            </div>
+            
+            <div class="control-panel">
+                <form id="formTurno">
+                    <div class="input-group">
+                        <label>Ingrese su ID de Empleado</label>
+                        <input type="number" id="empId" placeholder="Ej. 1" required>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="btn-action btn-entrada" onclick="procesarTurno('entrada')">
+                            <i class="fa-solid fa-right-to-bracket"></i> Entrada
+                        </button>
+                        <button type="button" class="btn-action btn-salida" onclick="procesarTurno('salida')">
+                            <i class="fa-solid fa-right-from-bracket"></i> Salida
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="system-log">
+            <div class="log-header">
+                <span><i class="fa-solid fa-terminal"></i> turno_service.py</span>
+                <span>Servidor Activo</span>
+            </div>
+            <div class="log-body" id="consolaLog">
+                <div style="color: #64748B;">Esperando registros de asistencia...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Simulador de Base de Datos para generar los id_turno automáticos
+        let turnosActivos = {}; // Guarda { id_empleado: id_turno }
+        let contadorTurnos = 501; // Como en tu ejemplo, empezamos en 501
+
+        // 1. Lógica del Reloj Digital en Tiempo Real
+        function actualizarReloj() {
+            const ahora = new Date();
+            
+            const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('fechaReloj').textContent = ahora.toLocaleDateString('es-MX', opcionesFecha);
+            
+            let horas = ahora.getHours();
+            let minutos = ahora.getMinutes().toString().padStart(2, '0');
+            let segundos = ahora.getSeconds().toString().padStart(2, '0');
+            let ampm = horas >= 12 ? 'PM' : 'AM';
+            
+            horas = horas % 12;
+            horas = horas ? horas : 12; // La hora '0' debe ser '12'
+            horas = horas.toString().padStart(2, '0');
+
+            document.getElementById('horaReloj').textContent = `${horas}:${minutos}:${segundos} ${ampm}`;
+        }
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        // 2. Lógica para Registrar Entrada y Salida (Conectado a tu clase Turno)
+        function procesarTurno(tipoAccion) {
+            const empIdInput = document.getElementById('empId');
+            const empId = empIdInput.value;
+
+            if (!empId) {
+                alert("Por favor, ingrese un ID de empleado válido.");
+                return;
+            }
+
+            // Obtenemos la hora actual del sistema en formato "HH:MM AM/PM" como en tu Python
+            const ahora = new Date();
+            let horas = ahora.getHours();
+            let minutos = ahora.getMinutes().toString().padStart(2, '0');
+            let ampm = horas >= 12 ? 'PM' : 'AM';
+            horas = horas % 12;
+            horas = horas ? horas : 12;
+            const horaString = `${horas.toString().padStart(2, '0')}:${minutos} ${ampm}`;
+
+            const consola = document.getElementById('consolaLog');
+
+            if (tipoAccion === 'entrada') {
+                // Simulación de: registrar_entrada(hora)
+                if (turnosActivos[empId]) {
+                    alert(`El empleado ${empId} ya tiene un turno abierto.`);
+                    return;
+                }
+                
+                let idTurnoNuevo = contadorTurnos++;
+                turnosActivos[empId] = idTurnoNuevo; // Guardamos el turno activo
+
+                // Imprimir en la consola (Simulando el POST)
+                consola.innerHTML += `
+                    <div class="log-entry log-post">
+                        [POST] ⏰ Entrada registrada para Empleado ${empId} a las ${horaString}<br>
+                        <span style="color: #64748B; font-size: 11px;">(ID Turno generado: ${idTurnoNuevo})</span>
+                    </div>
+                `;
+
+            } else if (tipoAccion === 'salida') {
+                // Simulación de: registrar_salida(hora)
+                if (!turnosActivos[empId]) {
+                    alert(`El empleado ${empId} no tiene ninguna entrada registrada hoy.`);
+                    return;
+                }
+
+                // Imprimir en la consola (Simulando el PUT)
+                consola.innerHTML += `
+                    <div class="log-entry log-put">
+                        [PUT] 🛑 Salida registrada para Empleado ${empId} a las ${horaString}. Turno terminado.<br>
+                        <span style="color: #64748B; font-size: 11px;">(ID Turno cerrado: ${turnosActivos[empId]})</span>
+                    </div>
+                `;
+
+                delete turnosActivos[empId]; // Borramos el turno activo
+            }
+
+            // Auto-scroll de la consola hacia abajo
+            consola.scrollTop = consola.scrollHeight;
+            empIdInput.value = ""; // Limpiar el input para el siguiente empleado
+        }
+    </script>
+</body>
+</html>

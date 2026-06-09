@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Punto de Venta - Tienda de Conveniencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= COLORES OXXO ================= */
+        :root {
+            --oxxo-red: #E21836;
+            --oxxo-yellow: #FFD100;
+            --bg-light: #F4F6F9;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+            --success: #10B981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+        body { background-color: var(--bg-light); color: var(--text-dark); display: flex; flex-direction: column; height: 100vh; }
+
+        /* ================= NAVEGACIÓN ================= */
+        .navbar {
+            background-color: var(--oxxo-red);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+            border-bottom: 5px solid var(--oxxo-yellow);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand { font-size: 24px; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .session-info { font-size: 14px; font-weight: 700; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; }
+
+        /* ================= ESTRUCTURA PRINCIPAL ================= */
+        .pos-container {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* ================= PANEL DE COBRO (IZQUIERDA) ================= */
+        .checkout-panel {
+            background: var(--white);
+            width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+
+        .checkout-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .checkout-header h2 { color: var(--oxxo-red); font-size: 20px; font-weight: 900; }
+
+        .checkout-form { padding: 25px; flex: 1; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+        .form-group input { 
+            width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 16px; 
+            background-color: #F8FAFC; transition: 0.3s;
+        }
+        .form-group input:focus { outline: none; border-color: var(--oxxo-yellow); background-color: var(--white); }
+        
+        .total-display {
+            background-color: var(--text-dark);
+            color: var(--success);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: right;
+            margin-bottom: 20px;
+            font-family: 'Courier Prime', monospace;
+        }
+        .total-display .label { color: #94A3B8; font-size: 12px; font-family: 'Roboto', sans-serif; text-transform: uppercase; margin-bottom: 5px; }
+        .total-display .monto { font-size: 36px; font-weight: 700; }
+
+        .btn-cobrar {
+            width: 100%; background-color: var(--oxxo-yellow); color: var(--text-dark); border: none; 
+            padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; transition: 0.2s;
+            font-size: 18px; text-transform: uppercase; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-cobrar:hover { background-color: #E6BC00; transform: translateY(-2px); }
+
+        /* ================= HISTORIAL DE TICKETS (DERECHA) ================= */
+        .tickets-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tickets-header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .tickets-header h2 { font-size: 20px; color: var(--text-dark); }
+
+        .tickets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Estilo de Papel Térmico (Ticket) */
+        .ticket-card {
+            background: var(--white);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+            border-top: 5px solid var(--oxxo-red);
+            font-family: 'Courier Prime', monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Borde dentado inferior para simular el corte del papel */
+        .ticket-card::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-size: 16px 16px;
+            background-image: radial-gradient(circle at 8px 0, transparent 8px, var(--white) 9px);
+        }
+
+        .ticket-logo { text-align: center; font-weight: 700; font-size: 18px; margin-bottom: 15px; border-bottom: 1px dashed #CBD5E1; padding-bottom: 10px; }
+        
+        .ticket-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .ticket-total { font-weight: 700; font-size: 18px; margin-top: 10px; border-top: 1px dashed #CBD5E1; padding-top: 10px; }
+
+        .badge-estado {
+            display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-family: 'Roboto', sans-serif; font-weight: 700;
+            text-align: center; margin-top: 15px; text-transform: uppercase;
+        }
+        .estado-finalizada { background-color: #D1FAE5; color: #065F46; }
+        .estado-cancelada { background-color: #FEE2E2; color: #991B1B; text-decoration: line-through; }
+
+        .btn-cancelar {
+            margin-top: 15px; width: 100%; background-color: transparent; border: 1px solid var(--oxxo-red); 
+            color: var(--oxxo-red); padding: 8px; font-family: 'Roboto', sans-serif; font-weight: 700; 
+            border-radius: 4px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-cancelar:hover { background-color: var(--oxxo-red); color: var(--white); }
+        .btn-cancelar:disabled { border-color: #CBD5E1; color: #94A3B8; cursor: not-allowed; background: transparent; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fa-solid fa-barcode"></i> Módulo de Ventas</div>
+        <div class="session-info"><i class="fa-solid fa-user"></i> Caja 1 - Turno Matutino</div>
+    </nav>
+
+    <div class="pos-container">
+        
+        <div class="checkout-panel">
+            <div class="checkout-header">
+                <h2>NUEVA TRANSACCIÓN</h2>
+            </div>
+            <form class="checkout-form" id="formVenta" onsubmit="procesarCobro(event)">
+                <div class="form-group">
+                    <label>ID de Venta (Autogenerado)</label>
+                    <input type="number" id="idVenta" placeholder="Ej. 4" required>
+                </div>
+                <div class="form-group">
+                    <label>ID de Empleado (Cajero)</label>
+                    <input type="number" id="idEmpleado" placeholder="Ej. 1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Monto Total a Cobrar ($)</label>
+                    <input type="number" id="montoTotal" step="0.50" placeholder="Ej. 500.00" oninput="actualizarPantallaDisplay()" required>
+                </div>
+
+                <div class="total-display">
+                    <div class="label">Total a Pagar</div>
+                    <div class="monto" id="displayMonto">$0.00</div>
+                </div>
+
+                <button type="submit" class="btn-cobrar">
+                    <i class="fa-solid fa-cash-register"></i> Crear Ticket
+                </button>
+            </form>
+        </div>
+
+        <div class="tickets-panel">
+            <div class="tickets-header">
+                <h2><i class="fa-solid fa-receipt"></i> Historial de Tickets Recientes</h2>
+            </div>
+            <div class="tickets-grid" id="listaTickets">
+                
+                <div class="ticket-card" id="ticket_1">
+                    <div class="ticket-logo">OXXO EXPRESS</div>
+                    <div class="ticket-row"><span>Venta ID:</span> <span>0001</span></div>
+                    <div class="ticket-row"><span>Cajero ID:</span> <span>01</span></div>
+                    <div class="ticket-row"><span>Fecha:</span> <span>Hoy</span></div>
+                    <div class="ticket-row ticket-total"><span>TOTAL:</span> <span>$500.00</span></div>
+                    <div class="badge-estado estado-finalizada" id="estado_1">Finalizada</div>
+                    <button class="btn-cancelar" id="btn_cancel_1" onclick="cancelarVenta(1)">Cancelar Venta</button>
+                </div>
+
+                <div class="ticket-card" id="ticket_2">
+                    <div class="ticket-logo">OXXO EXPRESS</div>
+                    <div class="ticket-row"><span>Venta ID:</span> <span>0002</span></div>
+                    <div class="ticket-row"><span>Cajero ID:</span> <span>02</span></div>
+                    <div class="ticket-row"><span>Fecha:</span> <span>Hoy</span></div>
+                    <div class="ticket-row ticket-total"><span>TOTAL:</span> <span>$300.00</span></div>
+                    <div class="badge-estado estado-finalizada" id="estado_2">Finalizada</div>
+                    <button class="btn-cancelar" id="btn_cancel_2" onclick="cancelarVenta(2)">Cancelar Venta</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const formatoDinero = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+
+        // Actualiza el display negro estilo digital mientras escribes el monto
+        function actualizarPantallaDisplay() {
+            let monto = parseFloat(document.getElementById('montoTotal').value) || 0;
+            document.getElementById('displayMonto').textContent = formatoDinero.format(monto);
+        }
+
+        // Función que simula: crear_ticket(self)
+        function procesarCobro(event) {
+            event.preventDefault();
+
+            let idVenta = document.getElementById('idVenta').value;
+            let idEmpleado = document.getElementById('idEmpleado').value;
+            let total = parseFloat(document.getElementById('montoTotal').value);
+
+            // Validar si el ID ya existe en pantalla para no duplicarlo en este ejemplo visual
+            if (document.getElementById(`ticket_${idVenta}`)) {
+                alert(`Error: La venta con ID ${idVenta} ya existe en el historial.`);
+                return;
+            }
+
+            // Crear el nuevo Ticket HTML (Papel térmico)
+            let listaTickets = document.getElementById('listaTickets');
+            let nuevoTicket = document.createElement('div');
+            nuevoTicket.className = 'ticket-card';
+            nuevoTicket.id = `ticket_${idVenta}`;
+            
+            let idVentaFormateado = idVenta.padStart(4, '0');
+            let idEmpFormateado = idEmpleado.padStart(2, '0');
+
+            nuevoTicket.innerHTML = `
+                <div class="ticket-logo">OXXO EXPRESS</div>
+                <div class="ticket-row"><span>Venta ID:</span> <span>${idVentaFormateado}</span></div>
+                <div class="ticket-row"><span>Cajero ID:</span> <span>${idEmpFormateado}</span></div>
+                <div class="ticket-row"><span>Fecha:</span> <span>Reciente</span></div>
+                <div class="ticket-row ticket-total"><span>TOTAL:</span> <span>${formatoDinero.format(total)}</span></div>
+                <div class="badge-estado estado-finalizada" id="estado_${idVenta}">Finalizada</div>
+                <button class="btn-cancelar" id="btn_cancel_${idVenta}" onclick="cancelarVenta(${idVenta})">Cancelar Venta</button>
+            `;
+
+            // Agregamos el ticket al inicio de la lista
+            listaTickets.insertBefore(nuevoTicket, listaTickets.firstChild);
+
+            // Print en consola igual que en Python
+            console.log(`Venta ID: ${idVenta} realizada por Empleado ID: ${idEmpleado} con total de: ${total}`);
+            
+            // Reiniciar formulario
+            document.getElementById('formVenta').reset();
+            document.getElementById('displayMonto').textContent = "$0.00";
+        }
+
+        // Función que simula: cancelar_venta(self)
+        function cancelarVenta(idVenta) {
+            let confirmacion = confirm(`¿Estás seguro de que deseas cancelar la Venta ID: ${idVenta}?`);
+            
+            if (confirmacion) {
+                // Cambiar estado a Cancelada
+                let badge = document.getElementById(`estado_${idVenta}`);
+                badge.textContent = "Cancelada";
+                badge.className = "badge-estado estado-cancelada";
+
+                // Deshabilitar el botón
+                let btn = document.getElementById(`btn_cancel_${idVenta}`);
+                btn.disabled = true;
+                btn.textContent = "Venta Cancelada";
+
+                // Print en consola igual que en Python
+                console.log(`Venta ID: ${idVenta} ha sido cancelada.`);
+            }
+        }
+    </script>
+</body>
+</html>
