@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+class turno(models.Model):
+    nombre = models.CharField(max_length=100)
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
