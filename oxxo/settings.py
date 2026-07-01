@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'almacen',
     'caja',
-    'empleado',
+    'empleados',
     'turno',
     'ventas',
     'django.contrib.admin',
