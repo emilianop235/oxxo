@@ -1,6 +1,6 @@
 from django.db import models
 
-class empleado(models.Model):
+class empleados(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     correo = models.EmailField()
