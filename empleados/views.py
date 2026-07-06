@@ -4,7 +4,7 @@ from .models import empleado
 def listarempleados(request):
     # Solicitamos a PostgreSQL la lista completa de empleados
     consultaempleados = empleado.objects.all()
-    return render(request, 'empleados/empleados.html', {'consultaempleados': consultaempleados})
+    return render(request, 'empleado/empleado.html', {'consultaempleados': consultaempleados})
 
 def crearempleado(request):
     if request.method == 'POST':
