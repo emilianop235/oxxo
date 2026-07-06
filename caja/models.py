@@ -9,4 +9,3 @@ class caja(models.Model):
 
     def __str__(self):
         return f"Caja {self.numero} - {self.usuario.nombre} - {self.turno.nombre}"
-    

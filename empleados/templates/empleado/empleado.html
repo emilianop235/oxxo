@@ -2,351 +2,152 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Recursos Humanos - Tienda de Conveniencia</title>
+    <title>MiOxxo - Recursos Humanos</title>
+    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ================= COLORES OXXO ================= */
+        /* ================= VARIABLES DE COLOR OXXO ================= */
         :root {
-            --oxxo-red: #E21836;
-            --oxxo-yellow: #FFD100;
-            --bg-light: #F1F5F9;
-            --text-dark: #1E293B;
-            --text-muted: #64748B;
-            --white: #FFFFFF;
-            --border: #E2E8F0;
+            --primary: #e5121c; /* Rojo Oxxo */
+            --primary-dark: #b30b12; 
+            --accent: #fff200; /* Amarillo Oxxo */
+            --bg-color: #f8fafc; 
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        /* ================= ESTILOS GENERALES ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
 
-        body { background-color: var(--bg-light); color: var(--text-dark); }
+        /* ================= BARRA LATERAL (SIDEBAR TEMPORAL) ================= */
+        .sidebar { width: 250px; background-color: var(--primary); color: var(--white); display: flex; flex-direction: column; padding: 20px 0; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
+        .sidebar h2 { text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 26px; color: var(--accent); }
+        .sidebar h2 span { color: var(--white); }
+        .nav-link { padding: 15px 25px; color: #fee2e2; text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 600; }
+        .nav-link.active { background-color: var(--primary-dark); color: var(--accent); border-left: 5px solid var(--accent); }
 
-        /* ================= NAVEGACIÓN ================= */
-        .navbar {
-            background-color: var(--oxxo-red);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--white);
-            border-bottom: 5px solid var(--oxxo-yellow);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .navbar-brand { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-
-        /* ================= ESTRUCTURA PRINCIPAL ================= */
-        .hr-container {
-            display: flex;
-            gap: 30px;
-            padding: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-            align-items: flex-start;
-        }
-
-        /* ================= PANEL DE ALTA (IZQUIERDA) ================= */
-        .alta-panel {
-            background: var(--white);
-            width: 350px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 30px;
-        }
-
-        .alta-header {
-            background-color: var(--text-dark);
-            color: var(--white);
-            padding: 20px;
-            text-align: center;
-        }
-
-        .alta-header i { font-size: 40px; color: var(--oxxo-yellow); margin-bottom: 10px; }
-        .alta-header h2 { font-size: 18px; font-weight: 700; }
-
-        .alta-form { padding: 25px; }
-
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
-        .form-group input { 
-            width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; 
-            background-color: #F8FAFC;
-        }
-        .form-group input:focus { outline: none; border-color: var(--oxxo-red); background-color: var(--white); }
-
-        .btn-alta {
-            width: 100%; background-color: var(--oxxo-red); color: var(--white); border: none; 
-            padding: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.2s;
-            margin-top: 10px; font-size: 15px;
-        }
-        .btn-alta:hover { background-color: #C1122B; }
-
-        /* ================= PANEL DE NÓMINAS (DERECHA) ================= */
-        .nomina-panel {
-            flex: 1;
-        }
-
-        .nomina-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .nomina-header h2 { color: var(--text-dark); font-size: 22px; }
-
-        .empleados-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* Tarjeta de Empleado (Recibo de Pago) */
-        .empleado-card {
-            background: var(--white);
-            border-radius: 10px;
-            border-left: 6px solid var(--oxxo-yellow);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 25px;
-            transition: transform 0.2s;
-        }
-        .empleado-card:hover { transform: translateX(5px); }
-
-        .empleado-info { display: flex; align-items: center; gap: 20px; width: 300px; }
-        .gafete-icon { 
-            width: 50px; height: 50px; background-color: #F1F5F9; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--text-muted);
-        }
+        /* ================= CONTENIDO PRINCIPAL ================= */
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; }
         
-        .empleado-detalles h3 { font-size: 16px; color: var(--text-dark); margin-bottom: 3px; }
+        /* Navbar Superior */
+        .navbar { background-color: var(--white); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border-bottom: 1px solid var(--border-color); }
+        .navbar h2 { font-size: 20px; font-weight: 700; color: var(--primary-dark); }
+        .user-info { font-size: 14px; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+
+        /* Área de trabajo de Dos Columnas */
+        .hr-container { display: flex; gap: 30px; padding: 30px; flex: 1; overflow: hidden; }
+
+        /* Columna Formulario (Izquierda) */
+        .alta-panel { flex: 0 0 360px; background: var(--white); border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 4px solid var(--primary); height: fit-content; overflow: hidden; }
+        .alta-header { background-color: #0f172a; color: var(--white); padding: 20px; text-align: center; }
+        .alta-header i { font-size: 36px; color: var(--accent); margin-bottom: 8px; }
+        .alta-header h3 { font-size: 16px; font-weight: 700; }
+        .alta-form { padding: 25px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+        .form-group input { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(229, 18, 54, 0.1); }
+        
+        .btn-alta { width: 100%; background-color: var(--primary); color: var(--white); border: none; padding: 12px; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-alta:hover { background-color: var(--primary-dark); color: var(--accent); }
+
+        /* Columna Tarjetas (Derecha) */
+        .nomina-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .panel-title { font-size: 18px; font-weight: 700; color: var(--primary-dark); margin-bottom: 20px; }
+        .empleados-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-right: 5px; }
+
+        /* Tarjeta de Empleado */
+        .empleado-card { background: var(--white); border-radius: 10px; border-left: 6px solid var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: space-between; padding: 18px 25px; transition: 0.2s; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
+        .empleado-card:hover { transform: translateX(5px); background-color: #fffbeb; }
+        .empleado-info { display: flex; align-items: center; gap: 18px; }
+        .gafete-icon { width: 45px; height: 45px; background-color: #f1f5f9; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; color: var(--text-muted); border: 1px solid var(--border-color); }
+        .empleado-detalles h4 { font-size: 16px; color: var(--text-main); font-weight: 700; margin-bottom: 2px; }
         .empleado-detalles p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-        .badge-id { background-color: var(--text-dark); color: var(--oxxo-yellow); padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-right: 5px; }
-
-        /* Calculadora de Nómina Integrada */
-        .calculadora-nomina {
-            display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            background-color: #F8FAFC;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .input-mini { width: 90px; }
-        .input-mini label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
-        .input-mini input { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; text-align: right; }
-
-        .btn-calcular {
-            background-color: var(--text-dark); color: var(--white); border: none; padding: 9px 15px;
-            border-radius: 4px; font-weight: 700; cursor: pointer; transition: 0.2s;
-        }
-        .btn-calcular:hover { background-color: #0F172A; }
-
-        /* Resultado de la Nómina */
-        .resultado-nomina {
-            width: 150px;
-            text-align: right;
-        }
-        .resultado-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
-        .resultado-monto { font-size: 22px; font-weight: 900; color: #10B981; }
-
+        
+        /* Detalles de Contacto Internos */
+        .empleado-contacto { text-align: right; }
+        .contacto-item { font-size: 13px; color: var(--text-main); font-weight: 500; margin-bottom: 2px; }
+        .contacto-item i { color: var(--primary); margin-right: 6px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="navbar-brand"><i class="fa-solid fa-users-gear"></i> Portal de Recursos Humanos OXXO</div>
-        <div><i class="fa-solid fa-calendar-check"></i> Quincena: 01 al 15 del Mes</div>
-    </nav>
+    <aside class="sidebar">
+        <h2>Mi<span>Oxxo</span></h2>
+        <a class="nav-link active"><i class="fa-solid fa-id-badge"></i> Empleados</a>
+    </aside>
 
-    <div class="hr-container">
-
-        <div class="alta-panel">
-            <div class="alta-header">
-                <i class="fa-solid fa-id-badge"></i>
-                <h2>Nuevo Ingreso</h2>
-                <p style="font-size: 13px; color: #94A3B8; margin-top: 5px;">Generar alta en sistema</p>
+    <main class="main-content">
+        <nav class="navbar">
+            <h2>Portal de Control de Personal</h2>
+            <div class="user-info">
+                <i class="fa-solid fa-users-gear" style="color: var(--primary);"></i> Oficina de Recursos Humanos
             </div>
-            <form class="alta-form" id="formAlta" onsubmit="registrarEmpleado(event)">
-                <div class="form-group">
-                    <label>ID de Empleado</label>
-                    <input type="number" id="idEmp" placeholder="Ej. 4" required>
-                </div>
-                <div class="form-group">
-                    <label>Nombre(s)</label>
-                    <input type="text" id="nombreEmp" placeholder="Ej. Carlos" required>
-                </div>
-                <div class="form-group">
-                    <label>Apellido(s)</label>
-                    <input type="text" id="apellidoEmp" placeholder="Ej. López" required>
-                </div>
-                <div class="form-group">
-                    <label>Puesto Asignado</label>
-                    <input type="text" id="puestoEmp" placeholder="Ej. Cajero" required>
-                </div>
-                <button type="submit" class="btn-alta"><i class="fa-solid fa-user-plus"></i> Dar de Alta</button>
-            </form>
-        </div>
+        </nav>
 
-        <div class="nomina-panel">
-            <div class="nomina-header">
-                <h2>Plantilla Activa y Nóminas</h2>
+        <div class="hr-container">
+
+            <div class="alta-panel">
+                <div class="alta-header">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <h3>Registro de Personal</h3>
+                </div>
+                <form class="alta-form" action="/pageempleados/nuevo/" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Nombre(s)</label>
+                        <input type="text" name="nombre" placeholder="Ej. Carlos" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido(s)</label>
+                        <input type="text" name="apellido" placeholder="Ej. López" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" name="correo" placeholder="usuario@mioxxo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono de Contacto</label>
+                        <input type="text" name="telefono" placeholder="Ej. 4771234567" required>
+                    </div>
+                    <button type="submit" class="btn-alta">Dar de Alta Empleado</button>
+                </form>
             </div>
-            
-            <div class="empleados-list" id="listaEmpleados">
+
+            <div class="nomina-panel">
+                <h3 class="panel-title">Plantilla de Colaboradores Activos</h3>
                 
-                <div class="empleado-card">
-                    <div class="empleado-info">
-                        <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
-                        <div class="empleado-detalles">
-                            <h3>Emilio Pérez</h3>
-                            <p><span class="badge-id">ID: 1</span> Desarrollador</p>
+                <div class="empleados-list">
+                    {% for e in consultaempleados %}
+                    <div class="empleado-card">
+                        <div class="empleado-info">
+                            <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
+                            <div class="empleado-detalles">
+                                <h4>{{ e.nombre }} {{ e.apellido }}</h4>
+                                <p style="color: var(--primary-dark); font-weight: 600;"><i class="fa-solid fa-id-card"></i> Colaborador MiOxxo</p>
+                            </div>
+                        </div>
+                        <div class="empleado-contacto">
+                            <div class="contacto-item"><i class="fa-solid fa-envelope"></i>{{ e.correo }}</div>
+                            <div class="contacto-item" style="color: var(--text-muted);"><i class="fa-solid fa-phone"></i>{{ e.telefono }}</div>
                         </div>
                     </div>
-                    <div class="calculadora-nomina">
-                        <div class="input-mini">
-                            <label>Pago x Día ($)</label>
-                            <input type="number" id="pago_1" value="100">
-                        </div>
-                        <div class="input-mini">
-                            <label>Días Trab.</label>
-                            <input type="number" id="dias_1" value="20">
-                        </div>
-                        <button class="btn-calcular" onclick="calcularNomina(1, 'Emilio Pérez')">Calcular</button>
+                    {% empty %}
+                    <div class="empleado-card" style="justify-content: center; padding: 30px; color: var(--text-muted);">
+                        No hay empleados registrados en la plantilla de MiOxxo.
                     </div>
-                    <div class="resultado-nomina">
-                        <div class="resultado-label">Total a Pagar</div>
-                        <div class="resultado-monto" id="resultado_1">---</div>
-                    </div>
+                    {% endfor %}
                 </div>
-
-                <div class="empleado-card">
-                    <div class="empleado-info">
-                        <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
-                        <div class="empleado-detalles">
-                            <h3>Ana García</h3>
-                            <p><span class="badge-id">ID: 2</span> Diseñadora</p>
-                        </div>
-                    </div>
-                    <div class="calculadora-nomina">
-                        <div class="input-mini">
-                            <label>Pago x Día ($)</label>
-                            <input type="number" id="pago_2" value="80">
-                        </div>
-                        <div class="input-mini">
-                            <label>Días Trab.</label>
-                            <input type="number" id="dias_2" value="22">
-                        </div>
-                        <button class="btn-calcular" onclick="calcularNomina(2, 'Ana García')">Calcular</button>
-                    </div>
-                    <div class="resultado-nomina">
-                        <div class="resultado-label">Total a Pagar</div>
-                        <div class="resultado-monto" id="resultado_2">---</div>
-                    </div>
-                </div>
-
-                <div class="empleado-card">
-                    <div class="empleado-info">
-                        <div class="gafete-icon"><i class="fa-solid fa-user"></i></div>
-                        <div class="empleado-detalles">
-                            <h3>Luis Martínez</h3>
-                            <p><span class="badge-id">ID: 3</span> Analista</p>
-                        </div>
-                    </div>
-                    <div class="calculadora-nomina">
-                        <div class="input-mini">
-                            <label>Pago x Día ($)</label>
-                            <input type="number" id="pago_3" value="90">
-                        </div>
-                        <div class="input-mini">
-                            <label>Días Trab.</label>
-                            <input type="number" id="dias_3" value="18">
-                        </div>
-                        <button class="btn-calcular" onclick="calcularNomina(3, 'Luis Martínez')">Calcular</button>
-                    </div>
-                    <div class="resultado-nomina">
-                        <div class="resultado-label">Total a Pagar</div>
-                        <div class="resultado-monto" id="resultado_3">---</div>
-                    </div>
-                </div>
-
             </div>
+
         </div>
+    </main>
 
-    </div>
-
-    <script>
-        const formatoDinero = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
-
-        // Función que simula: alta(self)
-        function registrarEmpleado(event) {
-            event.preventDefault();
-
-            let id = document.getElementById('idEmp').value;
-            let nombre = document.getElementById('nombreEmp').value;
-            let apellido = document.getElementById('apellidoEmp').value;
-            let puesto = document.getElementById('puestoEmp').value;
-            let nombreCompleto = `${nombre} ${apellido}`;
-
-            // Crear nueva tarjeta HTML de empleado
-            let lista = document.getElementById('listaEmpleados');
-            let nuevaTarjeta = document.createElement('div');
-            nuevaTarjeta.className = 'empleado-card';
-            
-            nuevaTarjeta.innerHTML = `
-                <div class="empleado-info">
-                    <div class="gafete-icon"><i class="fa-solid fa-user-check" style="color: #10B981;"></i></div>
-                    <div class="empleado-detalles">
-                        <h3>${nombreCompleto}</h3>
-                        <p><span class="badge-id">ID: ${id}</span> ${puesto}</p>
-                    </div>
-                </div>
-                <div class="calculadora-nomina">
-                    <div class="input-mini">
-                        <label>Pago x Día ($)</label>
-                        <input type="number" id="pago_${id}" placeholder="0">
-                    </div>
-                    <div class="input-mini">
-                        <label>Días Trab.</label>
-                        <input type="number" id="dias_${id}" placeholder="0">
-                    </div>
-                    <button class="btn-calcular" onclick="calcularNomina('${id}', '${nombreCompleto}')">Calcular</button>
-                </div>
-                <div class="resultado-nomina">
-                    <div class="resultado-label">Total a Pagar</div>
-                    <div class="resultado-monto" id="resultado_${id}">---</div>
-                </div>
-            `;
-
-            lista.appendChild(nuevaTarjeta);
-            
-            console.log(`Empleado ${nombreCompleto} con ID ${id} ha sido dado de alta como ${puesto}.`);
-            alert(`¡Alta exitosa!\n${nombreCompleto} agregado al sistema.`);
-            
-            document.getElementById('formAlta').reset();
-        }
-
-        // Función que simula: calcular_nomina(self, pago_por_dia, dias_trabajados)
-        function calcularNomina(id, nombreEmpleado) {
-            let pagoPorDia = parseFloat(document.getElementById(`pago_${id}`).value) || 0;
-            let diasTrabajados = parseFloat(document.getElementById(`dias_${id}`).value) || 0;
-
-            let nomina = pagoPorDia * diasTrabajados;
-
-            // Actualizar la vista
-            document.getElementById(`resultado_${id}`).textContent = formatoDinero.format(nomina);
-
-            // Print en consola como en tu código Python
-            console.log(`La nómina de ${nombreEmpleado} es: ${nomina}`);
-        }
-    </script>
 </body>
 </html>

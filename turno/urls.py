@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import listarturnos, crearturno
 
 urlpatterns = [
-    path('turno/', views.turno, name='turno'),
+    path('', listarturnos),
+    path('nuevo/', crearturno),
 ]
