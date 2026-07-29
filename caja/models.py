@@ -1,11 +1,14 @@
 from django.db import models
-from empleados.models import empleado
-from turno.models import turno
+from empleados.models import Empleado
+from turno.models import Turno
+from almacen.models import Sucursal # Importamos la sucursal para ubicar la caja
 
-class caja(models.Model):
+class Caja(models.Model):
     numero = models.CharField(max_length=20)
-    usuario = models.ForeignKey(empleado, on_delete=models.CASCADE, related_name='cajas')
-    turno = models.ForeignKey(turno, on_delete=models.CASCADE, related_name='cajas')
+    sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE, null=True, blank=True)
+    usuario = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='cajas')
+    turno = models.ForeignKey(Turno, on_delete=models.CASCADE, related_name='cajas')
+    estatus = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Caja {self.numero} - {self.usuario.nombre} - {self.turno.nombre}"
+        return f"Caja {self.numero} - {self.sucursal.nombre if self.sucursal else 'Sin Sucursal'}"

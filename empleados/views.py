@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
-from .models import empleado
+from .models import Empleado
 
 def listarempleados(request):
     # Solicitamos a PostgreSQL la lista completa de empleados
-    consultaempleados = empleado.objects.all()
+    consultaempleados = Empleado.objects.all()
     return render(request, 'empleado/empleado.html', {'consultaempleados': consultaempleados})
 
 def crearempleado(request):
     if request.method == 'POST':
-        empleado.objects.create(
+        Empleado.objects.create(
             nombre=request.POST['nombre'],
             apellido=request.POST['apellido'],
             correo=request.POST['correo'],

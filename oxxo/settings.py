@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'almacen',
     'caja',
     'empleados',
+    'productos',
     'turno',
     'ventas',
     'django.contrib.admin',

@@ -1,10 +1,14 @@
 from django.db import models
+from productos.models import Producto
+from caja.models import Caja
 
-class ventas(models.Model):
-    producto = models.CharField(max_length=100)
-    cantidad = models.IntegerField()
+class Venta(models.Model):
+    caja = models.ForeignKey(Caja, on_delete=models.SET_NULL, null=True, blank=True)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE) # Adiós al CharField, hola al catálogo real
+    cantidad = models.IntegerField(default=1)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_venta = models.DateTimeField(auto_now_add=True)
+    estatus = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.producto} x{self.cantidad}"
+        return f"Venta: {self.producto.nombre} x {self.cantidad}"
