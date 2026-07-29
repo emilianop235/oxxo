@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Detalle Producto - OXXO ERP{% endblock %}
+
+{% block section_title %}
+<i class="fa-solid fa-magnifying-glass" style="color: var(--oxxo-yellow);"></i> Ficha del Producto
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .center-panel { width: 100%; max-width: 450px; margin: 20px auto; }
+    .info-group { margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
+    .info-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+    .info-group p { font-size: 16px; color: var(--white); font-weight: 500; }
+    .btn-back { width: 100%; background: rgba(255,255,255,0.05); color: var(--white); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 25px; transition: all 0.3s ease; }
+    .btn-back:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--oxxo-yellow); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="center-panel">
+    <div class="glass-panel">
+        <h3 style="text-align: center; color: var(--oxxo-yellow); margin-bottom: 25px;"><i class="fa-solid fa-barcode"></i> Información del Catálogo</h3>
+        
+        <div class="info-group">
+            <label>Código de Barras</label>
+            <p style="font-family: monospace; letter-spacing: 2px;">{{ producto.codigo_barras }}</p>
+        </div>
+        <div class="info-group">
+            <label>Nombre Comercial</label>
+            <p style="color: var(--white); font-weight: 700; font-size: 18px;">{{ producto.nombre }}</p>
+        </div>
+        <div class="info-group">
+            <label>Descripción Física</label>
+            <p style="font-size: 14px;">{{ producto.descripcion }}</p>
+        </div>
+        <div class="info-group" style="border: none; padding-bottom: 0;">
+            <label>Precio Público</label>
+            <p style="color: var(--oxxo-yellow); font-weight: 700; font-size: 22px;">${{ producto.precio_venta }}</p>
+        </div>
+        
+        <a href="/pageproductos/" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Regresar al Catálogo</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Editar Producto - OXXO ERP{% endblock %}
+
+{% block section_title %}
+<i class="fa-solid fa-pen-to-square" style="color: var(--oxxo-yellow);"></i> Modificar Producto
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .center-panel { width: 100%; max-width: 450px; margin: 20px auto; }
+    .btn-cancel { width: 100%; background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 10px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="center-panel">
+    <div class="glass-panel">
+        <h3 style="text-align: center; color: var(--oxxo-yellow); margin-bottom: 25px;"><i class="fa-solid fa-box-open"></i> Datos del Producto</h3>
+        <form method="POST" action="/pageproductos/editar/{{ producto.id }}/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Código de Barras</label>
+                <input type="text" name="codigo_barras" value="{{ producto.codigo_barras }}" class="glass-input" required>
+            </div>
+            <div class="form-group">
+                <label>Nombre del Producto</label>
+                <input type="text" name="nombre" value="{{ producto.nombre }}" class="glass-input" required>
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea name="descripcion" class="glass-input" rows="3" required>{{ producto.descripcion }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Precio de Venta ($)</label>
+                <input type="number" name="precio_venta" step="0.01" value="{{ producto.precio_venta }}" class="glass-input" required>
+            </div>
+            <button type="submit" class="btn-submit">Guardar Cambios</button>
+            <a href="/pageproductos/" class="btn-cancel">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
